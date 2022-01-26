@@ -1,8 +1,10 @@
 # CacheLineSize
 By the Ajorpaz/Tullsen Group
 
+[Notes](https://docs.google.com/document/d/1To7tvY3saYzxBsnUqYrxLg5Z04TeZs-51bB1LkjfwW8/edit)
+
 # Viewing CSV Files
-View the .csv file by uploading it to.
+View the .csv file by uploading it to
 https://www.csvplot.com/
 
 # Disabling HW Prefecture
