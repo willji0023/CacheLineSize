@@ -7,16 +7,16 @@ By the Ajorpaz/Tullsen Group
 View the .csv file by uploading it to
 https://www.csvplot.com/
 
-## HW Prefecture
+## HW Prefetcher
 
 To enable/disable hardware prefecture, first run `cd msr-tools`.
 
-### Disabling HW Prefecture
+### Disabling HW Prefetcher
 `./wrmsr -p 0 0x1a0 0x60628e2289 `
 
 `./rdmsr 0x1a0`
 
-### Enabling HW Prefecture
+### Enabling HW Prefetcher
 `./wrmsr -p 0 0x1a0 0x60628e2089`
 
 `./rdmsr 0x1a0`
