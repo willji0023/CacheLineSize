@@ -6,9 +6,11 @@ LIBS = -lm
 
 build:
 	$(CC) $(OPTS) cachelinesize.c -o cachelinesize $(LIBS)
+	$(CC) $(OPTS) baseline.c -o baseline $(LIBS)
 
 build-fuzzer:
 	$(CLANG++) $(FUZZ_OPTIONS) cachelinesize.c -o cachelinesize $(LIBS)
 
 clean:
-	rm cachelinesize	
+	rm cachelinesize
+	rm baseline	
