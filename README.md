@@ -9,8 +9,10 @@ https://www.csvplot.com/
 
 # Disabling HW Prefecture
 `./wrmsr -p 0 0x1a0 0x60628e2289 `
+
 `./rdmsr 0x1a0`
 
 # Enabling HW Prefecture
 `./wrmsr -p 0 0x1a0 0x60628e2089`
+
 `./rdmsr 0x1a0`
