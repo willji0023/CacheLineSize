@@ -3,16 +3,20 @@ By the Ajorpaz/Tullsen Group
 
 [Notes](https://docs.google.com/document/d/1To7tvY3saYzxBsnUqYrxLg5Z04TeZs-51bB1LkjfwW8/edit)
 
-# Viewing CSV Files
+## Viewing CSV Files
 View the .csv file by uploading it to
 https://www.csvplot.com/
 
-# Disabling HW Prefecture
+## HW Prefecture
+
+To enable/disable hardware prefecture, first run `cd msr-tools`.
+
+### Disabling HW Prefecture
 `./wrmsr -p 0 0x1a0 0x60628e2289 `
 
 `./rdmsr 0x1a0`
 
-# Enabling HW Prefecture
+### Enabling HW Prefecture
 `./wrmsr -p 0 0x1a0 0x60628e2089`
 
 `./rdmsr 0x1a0`
