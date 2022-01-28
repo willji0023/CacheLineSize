@@ -11,6 +11,8 @@ https://www.csvplot.com/
 
 To enable/disable hardware prefecture, first run `cd msr-tools`.
 
+Make the executables using `make`.
+
 ### Disabling HW Prefetcher
 `./wrmsr -p 0 0x1a0 0x60628e2289 `
 
