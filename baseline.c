@@ -30,5 +30,5 @@ int main (int ac, char **av) {
 	maccess(array);
 	size_t missTime = rdtsc() - temp;
 
-	printf("Hit time: %lu\nMiss time: %lu", hitTime, missTime);
+	printf("Hit time: %lu\nMiss time: %lu\n", hitTime, missTime);
 }
