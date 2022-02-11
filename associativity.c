@@ -29,24 +29,22 @@ int main (int ac, char **av) {
 	fputs("iteration,latency\n", file);
 	char* array = (char*)malloc(maxRange); //[0] [cachesize*1] [cachesize*2][cachesize*3]
 
-    	int cachesize = 64000; //in kb
+    	int cachesize = 64000; //in b
 
-	int i = 16;
+	int i = 128;
         for (int j = 0 ; j < i ; j++){
             maccess(array+j*cachesize);
         }
         size_t time = rdtsc();
         for (int j = 0 ; j < i ; j++){
-            maccess(array+j*cachesize);
+        	size_t time = rdtsc();
+		maccess(array+j*cachesize);
+        	size_t delta = rdtsc() - time;
+		printf("Accessing array at index %i (block %i): %i\n", j*cachesize, j, delta);
         }
-        size_t delta = rdtsc() - time;
-	    for(int j = 0; j < i; j++){
-		    flush(array + (j*cachesize));
-	    }
-	times[i - 1] += delta;
-    
-    	for(int stride = 1; stride <= maxStride; stride*=2){
-		printf("%d,%d\n", stride, times[stride-1]);
+	for(int j = 0; j < i; j++){
+		flush(array + (j*cachesize));
 	}
+    
 	free(array);
 }
