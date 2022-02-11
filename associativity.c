@@ -14,8 +14,9 @@
 #include <sys/resource.h>
 #include "cacheutils.h"
 
+
 int main (int ac, char **av) {
-	cpu_set_t mask;
+    cpu_set_t mask;
 	CPU_ZERO(&mask);
 	CPU_SET(0, &mask);
 	sched_setaffinity(0, sizeof(mask), &mask);
@@ -26,24 +27,24 @@ int main (int ac, char **av) {
 	long maxRange = 32000000;
 	FILE *file =  fopen("results.csv", "w+");
 	fputs("iteration,latency\n", file);
-	char* array = (char*)malloc(maxRange);
+	char* array = (char*)malloc(maxRange); //[0] [cachesize*1] [cachesize*2][cachesize*3]
 
-    int cachelinesize = 64; //in bytes
-    //for (int i = 1 ; i < 10 ;i++){
-    int i = 10;
-    for (int j = 0 ; j < i ; j++){
-        maccess(array+j*cachelinesize);
-    }
-    size_t time = rdtsc();
-    for (int j = 0 ; j < i ; j++){
-        maccess(array+j*cachelinesize);
-    }
-    size_t delta = rdtsc() - time;
-	for(int j = 0; j < i; j++){
-		flush(array + (j*cachelinesize));
-	}
+    int cachesize = 64000; //in kb
+
+    for (int i = 0 ; i < 16 ; i++){
+        for (int j = 0 ; j < i ; j++){
+            maccess(array+j*cachesize);
+        }
+        size_t time = rdtsc();
+        for (int j = 0 ; j < i ; j++){
+            maccess(array+j*cachesize);
+        }
+        size_t delta = rdtsc() - time;
+	    for(int j = 0; j < i; j++){
+		    flush(array + (j*cachesize));
+	    }
 	times[i - 1] += delta;
-    //}
+    
     for(int stride = 1; stride <= maxStride; stride*=2){
 		printf("%d,%d\n", stride, times[stride-1]);
 	}

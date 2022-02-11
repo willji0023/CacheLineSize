@@ -32,12 +32,12 @@ uint64_t rdtsc() {
 
 void maccess(void* p)
 {
-  #asm volatile ("mfence");
+  asm volatile ("mfence");
   asm volatile ("movq (%0), %%rax\n"
     :
     : "c" (p)
     : "rax");
-  #asm volatile ("mfence");
+  asm volatile ("mfence");
 }
 
 void flush(void* p) {
