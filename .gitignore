@@ -1,3 +1,5 @@
 *.csv
 cachelinesize
 baseline
+cachesize
+associativity
