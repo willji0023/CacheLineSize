@@ -14,7 +14,6 @@
 #include <sys/resource.h>
 #include "cacheutils.h"
 
-
 int main (int ac, char **av) {
     	cpu_set_t mask;
 	CPU_ZERO(&mask);
@@ -31,12 +30,16 @@ int main (int ac, char **av) {
 
     	int cachesize = 64000; //in b
 
-	int i = 128;
+	// Access array i times so it's in the cache.
+	// *** How do we know when to stop filling the cache?
+	int i = 50;
         for (int j = 0 ; j < i ; j++){
-            maccess(array+j*cachesize);
-        }
+		maccess(array+j*cachesize);
+	}
+
+	// Time accesses until we get a miss
         size_t time = rdtsc();
-        for (int j = 0 ; j < i ; j++){
+        for (int j = 0 ; j < i; j++){
         	size_t time = rdtsc();
 		maccess(array+j*cachesize);
         	size_t delta = rdtsc() - time;
