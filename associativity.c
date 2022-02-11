@@ -29,24 +29,28 @@ int main (int ac, char **av) {
 	char* array = (char*)malloc(maxRange); //[0] [cachesize*1] [cachesize*2][cachesize*3]
 
     	int cachesize = 64000; //in b
-
-	// Access array i times so it's in the cache.
-	// *** How do we know when to stop filling the cache?
-	int i = 50;
-        for (int j = 0 ; j < i ; j++){
-		maccess(array+j*cachesize);
+	
+	// Flush all of the array from the cache
+	for (int i = 0; i < 20; i++) {
+		flush(array+i*cachesize);
 	}
 
 	// Time accesses until we get a miss
-        size_t time = rdtsc();
-        for (int j = 0 ; j < i; j++){
-        	size_t time = rdtsc();
-		maccess(array+j*cachesize);
-        	size_t delta = rdtsc() - time;
-		printf("Accessing array at index %i (block %i): %i\n", j*cachesize, j, delta);
+        for (int i = 0 ; i < 20; i++){
+		maccess(array+i*cachesize); // Access a new part of the array, add this to the cache
+
+		for (int j = 0; j <= i; j++) {
+        		size_t time = rdtsc();
+			maccess(array+j*cachesize);
+        		size_t delta = rdtsc() - time;
+			printf("Timing of block %i: %i\n", j, delta); 
+		}
+		printf("\n");
         }
-	for(int j = 0; j < i; j++){
-		flush(array + (j*cachesize));
+
+	// Flush all of the array from the cache
+	for (int i = 0; i < 20; i++) {
+		flush(array+i*cachesize);
 	}
     
 	free(array);
