@@ -30,18 +30,30 @@ int main (int ac, char **av) {
 
     	int cachesize = 64000; //in b
 	
+	// Fill the pointer-chasing array
+	int* indexes = (int*)malloc(20*sizeof(int));
+	for (int i = 0; i < 20; i++) {
+		indexes[i] = i * cachesize;
+	}
+
+	// Fill the pointer-pointer-chasing array
+	int** indexesToIndexes = (int**)malloc(20*sizeof(int*));
+	for (int i = 0; i < 20; i++) {
+		indexesToIndexes[i] = indexes + i;
+	}
+
 	// Flush all of the array from the cache
 	for (int i = 0; i < 20; i++) {
-		flush(array+i*cachesize);
+		flush(array+**(indexesToIndexes + i));
 	}
 
 	// Time accesses until we get a miss
         for (int i = 0 ; i < 20; i++){
-		maccess(array+i*cachesize); // Access a new part of the array, add this to the cache
+		maccess(array+**(indexesToIndexes+i)); // Access a new part of the array, add this to the cache
 
 		for (int j = 0; j <= i; j++) {
         		size_t time = rdtsc();
-			maccess(array+j*cachesize);
+			maccess(array+**(indexesToIndexes + j));
         		size_t delta = rdtsc() - time;
 			printf("Timing of block %i: %i\n", j, delta); 
 		}
@@ -50,7 +62,7 @@ int main (int ac, char **av) {
 
 	// Flush all of the array from the cache
 	for (int i = 0; i < 20; i++) {
-		flush(array+i*cachesize);
+		flush(array+**(indexesToIndexes + i));
 	}
     
 	free(array);
