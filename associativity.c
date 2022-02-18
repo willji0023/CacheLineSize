@@ -28,7 +28,7 @@ int main (int ac, char **av) {
 	fputs("iteration,latency\n", file);
 	char* array = (char*)malloc(maxRange); //[0] [cachesize*1] [cachesize*2][cachesize*3]
 
-    	int cachesize = 64000; //in b
+    	int cachesize = 32000; //in b
 	
 	// Fill the pointer-chasing array
 	int* indexes = (int*)malloc(20*sizeof(int));
