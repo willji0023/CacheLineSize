@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <sched.h>
 #include <sys/resource.h>
+#include <time.h>
 #include "cacheutils.h"
 
 int main (int ac, char **av) {
@@ -30,8 +31,19 @@ int main (int ac, char **av) {
 	fputs("iteration,latency\n", file);
 	char* array = (char*)malloc(maxRange); //[0] [cachesize*1] [cachesize*2][cachesize*3]
 
-    	int cachesize = 4096; //in b
+    	int cachesize = 32000; //in b
 
+	// Fill the pointer-chasing array
+	int* indexes = (int*)malloc(N*(N+1)/2*sizeof(int));
+	for (int i = 0; i < N*(N+1)/2; i++) {
+		indexes[i] = i * cachesize;
+	}
+
+	// Fill the pointer-pointer-chasing array
+	int** indexesToIndexes = (int**)malloc(N*(N+1)/2*sizeof(int*));
+	for (int i = 0; i < N*(N+1)/2; i++) {
+		indexesToIndexes[i] = indexes + i;
+	}
 	// Flush all of the array from the cache
 	for (int i = 0; i < N*(N+1)/2; i++) {
 		flush(array+i*cachesize);
@@ -40,27 +52,28 @@ int main (int ac, char **av) {
 	int unusedIndex = 0;
         for (int blocks = 1 ; blocks <= N; blocks++){
 		int startingIndex = unusedIndex;
-		for (int i = startingIndex, count = 1; count <= blocks; count++) {
+		// Measure miss times of new blocks
+		for (int i = startingIndex; i < startingIndex + blocks; i++) {
 			size_t time1 = rdtsc();
-			maccess(array+i*cachesize);
+			maccess(array+**(indexesToIndexes + i));
         		size_t delta1 = rdtsc() - time1;
 			unusedIndex++;
-			printf("Miss time of %ith of %i blocks: %i \n", count, blocks, delta1);
-			i++;
+			printf("Miss time of %ith of %i blocks: %i \n", i - startingIndex + 1, blocks, delta1);
 		}
-	       	       
-		for (int i = startingIndex, count = 1; count <= blocks; count++){
+	        
+		// Measure hit time of these new blocks. If these times begin to look like miss times,
+		// we know the cache set has been filled
+		for (int i = startingIndex; i < startingIndex + blocks; i++) {
         		size_t time2 = rdtsc();
-			maccess(array+i*cachesize);
+			maccess(array+**(indexesToIndexes + i));
         		size_t delta2 = rdtsc() - time2;
-			printf("Hit time of %ith of %i blocks: %i \n", count, blocks, delta2); 
-			i++;
+			printf("Hit time of %ith of %i blocks: %i \n", i - startingIndex + 1, blocks, delta2); 
 		}
 		printf("\n");
 
-		for (int i = startingIndex, count = 1; count <= blocks; count++){
-			flush(array+i*cachesize);
-			i++;
+		// Flush these blocks out of the cache
+		for (int i = startingIndex; i < startingIndex + blocks; i++) {
+			flush(array+**(indexesToIndexes + i));
 		}
         }
 
