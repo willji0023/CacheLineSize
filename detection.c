@@ -17,7 +17,7 @@
 
 int main (int ac, char **av) {
     long H = 16; 
-    int S = 1;
+    int S = 0;
     long maxRange = 33554432;
     int MaxAssoc = 16;
     long maxStride = 2048;
@@ -35,9 +35,9 @@ int main (int ac, char **av) {
             S = S + 1;
             prev_time = curr_time;
         }
-        // for(long i = 0; i < maxRange; i++){
-        //     flush(array + i);
-        // }
+        for(long i = 0; i < MaxAssoc; i++){
+            flush(array + (i*H));
+        }
         S = 1;
         H *= 2;
     }
