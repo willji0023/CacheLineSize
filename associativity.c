@@ -28,7 +28,7 @@ int main (int ac, char **av) {
 	fputs("iteration,latency\n", file);
 	char* array = (char*)malloc(maxRange); //[0] [cachesize*1] [cachesize*2][cachesize*3]
 
-    	int cachesize = 32000; //in b
+    	int cachesize = 32768; //in b
 	
 	// Fill the pointer-chasing array
 	int* indexes = (int*)malloc(20*sizeof(int));
@@ -55,7 +55,7 @@ int main (int ac, char **av) {
         		size_t time = rdtsc();
 			maccess(array+**(indexesToIndexes + j));
         		size_t delta = rdtsc() - time;
-			printf("Timing of block %i: %i\n", j, delta); 
+			printf("Timing of block %i: %i\n", j, delta); // TODO 
 		}
 		printf("\n");
         }
