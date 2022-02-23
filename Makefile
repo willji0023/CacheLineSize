@@ -9,6 +9,7 @@ build:
 	$(CC) $(OPTS) baseline.c -o baseline $(LIBS)
 	$(CC) $(OPTS) cachesize.c -o cachesize $(LIBS)
 	$(CC) $(OPTS) associativity.c -o associativity $(LIBS)
+	$(CC) $(OPTS) detection.c -o detection $(LIBS)
 
 build-fuzzer:
 	$(CLANG++) $(FUZZ_OPTIONS) cachelinesize.c -o cachelinesize $(LIBS)
