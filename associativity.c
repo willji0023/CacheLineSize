@@ -28,8 +28,8 @@ int main (int ac, char **av) {
 	fputs("iteration,latency\n", file);
 	char* array = (char*)malloc(maxRange); //[0] [cachesize*1] [cachesize*2][cachesize*3]
 
-    	int cachesize = 32768; //in b
-	
+	int cachesize = atoi(av[1]);
+
 	// Fill the pointer-chasing array
 	int* indexes = (int*)malloc(20*sizeof(int));
 	for (int i = 0; i < 20; i++) {
@@ -48,6 +48,8 @@ int main (int ac, char **av) {
 	}
 
 	// Time accesses until we get a miss
+	int timing[20*21/2];
+	int timingIndex=0;
         for (int i = 0 ; i < 20; i++){
 		maccess(array+**(indexesToIndexes+i)); // Access a new part of the array, add this to the cache
 
@@ -55,9 +57,8 @@ int main (int ac, char **av) {
         		size_t time = rdtsc();
 			maccess(array+**(indexesToIndexes + j));
         		size_t delta = rdtsc() - time;
-			printf("Timing of block %i: %i\n", j, delta); // TODO 
+			timing[timingIndex++] = delta;
 		}
-		printf("\n");
         }
 
 	// Flush all of the array from the cache
@@ -65,5 +66,14 @@ int main (int ac, char **av) {
 		flush(array+**(indexesToIndexes + i));
 	}
     
+	// Print timings
+	int index = 0;
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j <= i; j++) {
+			printf("Timing of block %i: %i\n", j, timing[index++]); 
+		}
+		printf("\n");
+	}
+
 	free(array);
 }
