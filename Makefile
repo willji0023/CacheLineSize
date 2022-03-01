@@ -11,6 +11,7 @@ build:
 	$(CC) $(OPTS) associativity.c -o associativity $(LIBS)
 	$(CC) $(OPTS) detection.c -o detection $(LIBS)
 	$(CC) $(OPTS) associativity2.c -o associativity2 $(LIBS)
+	$(CC) $(OPTS) cpuid_query.c -o cpuid_query $(LIBS)
 
 build-fuzzer:
 	$(CLANG++) $(FUZZ_OPTIONS) cachelinesize.c -o cachelinesize $(LIBS)

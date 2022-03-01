@@ -4,4 +4,5 @@ baseline
 cachesize
 associativity
 associativity2
-
+cpuid_query
+detection
