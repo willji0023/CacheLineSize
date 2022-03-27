@@ -40,6 +40,22 @@ void maccess(void* p)
   asm volatile ("mfence");
 }
 
+uint64_t maccessAndRdtsc(void* p)
+{
+  uint64_t a, d, b, c;
+  asm volatile ("mfence");
+  asm volatile ("rdtsc" : "=a" (a), "=d" (d));
+  a = (d<<32) | a;
+  asm volatile ("movq (%0), %%rax\n"
+    :
+    : "c" (p)
+    : "rax");
+  asm volatile ("mfence");
+  asm volatile ("rdtsc" : "=a" (b), "=d" (c));
+  b = (c<<32) | b;
+  return b - a;
+}
+
 void flush(void* p) {
     asm volatile ("clflush 0(%0)\n"
       :
