@@ -67,11 +67,11 @@ int main (int ac, char **av) {
 
 	// Create array and parameters for benchmark
 	long maxRange = 32000000;
-	char* array = (char*)malloc(maxRange);
+	char* array = (char*)aligned_alloc(1024, maxRange);
 	int cachelinesize = atoi(av[2]);
 	int num_access = atoi(av[1]);
-	printf("%d,\n",num_access);
-	printf("%d,\n",cachelinesize);
+	// printf("%d,\n",num_access);
+	// printf("%d,\n",cachelinesize);
 
 	// Initalize a 2-element structure to access the array in a
 	// randomized order
@@ -93,7 +93,8 @@ int main (int ac, char **av) {
 	size_t delta = 0;
 	for(int i = 0; i < num_access; i++){
 		size_t t = rdtsc();
-		delta += maccessAndRdtsc(addresses[indices[i]]);
+		maccess(addresses[indices[i]]);
+		delta += rdtsc() - t;
 	}
 
 	
@@ -103,7 +104,8 @@ int main (int ac, char **av) {
 	}
 
 	// Print the average access time
-	printf("%f,\n",(float) (delta/num_access));
+	printf("%i, %f\n", num_access, (float) (delta/num_access));
+	free(indices);
 	free(addresses);
 	free(array);
 }
