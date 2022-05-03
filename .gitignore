@@ -4,5 +4,7 @@ baseline
 cachesize
 associativity
 associativity2
+associativity3
 cpuid_query
 detection
+*.s
