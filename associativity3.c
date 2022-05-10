@@ -57,6 +57,8 @@ void shuffleAddresses(char **array, size_t n)
 
 
 int main (int ac, char **av) {
+	srand(time(NULL));
+
 	// Unoptimize program
 	cpu_set_t mask;
 	CPU_ZERO(&mask);
@@ -84,8 +86,11 @@ int main (int ac, char **av) {
 
 	// Access loop
 	for (int i = 0 ; i < num_access ; i++){
-		maccess(array + i*cachesize);
+		maccess(addresses[indices[i]]);
 	}
+
+	shuffleAddresses(addresses, num_access);
+	shuffleIndices(indices, num_access);
 
 	// Timing loop
 	size_t delta = 0;
