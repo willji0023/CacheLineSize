@@ -45,15 +45,6 @@ long run(int num, int STRIDE){
     }
     return ((sum0+sum1)+(sum2+sum3));
 }
-// long run(int num, int STRIDE){
-//     long i;
-//     long sum0 = 0;
-
-//     for(i = 0; i < num-STRIDE; i += STRIDE){
-// 		sum0 = sum0 + array[i];
-// 	}
-//     return (sum0);
-// }
 
 int main (int argc, char **argv) {
     cpu_set_t mask;
