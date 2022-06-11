@@ -5,7 +5,7 @@ for (( cachesize = 256; cachesize <= 32768; cachesize*=2 )); do
 	do
 		for j in {1..100}
 		do
-			./associativity3 $cachesize $i >> associativity${cachesize}.csv
+			./associativity $cachesize $i >> associativity${cachesize}.csv
 
 			printf "\r$i/18 trials done..."
 		done
