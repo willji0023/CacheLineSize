@@ -5,7 +5,7 @@ do
 	printf "Array Size (B),Throughput\n" > stride${j}.csv
 	for i in `seq 1 1 500`
 	do
-		./cachesizeTIME $j >> stride${j}.csv
+		./cachesize $j >> stride${j}.csv
 		#printf "\n" >> stride${j}.csv
 	done
 done
